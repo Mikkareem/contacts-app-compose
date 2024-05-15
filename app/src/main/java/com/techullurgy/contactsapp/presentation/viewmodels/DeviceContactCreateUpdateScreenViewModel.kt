@@ -4,10 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.techullurgy.contactsapp.data.utils.ServiceResult
 import com.techullurgy.contactsapp.domain.ContactsRepository
 import com.techullurgy.contactsapp.domain.model.DeviceContactRequest
+import com.techullurgy.contactsapp.domain.model.EmailInformation
+import com.techullurgy.contactsapp.domain.model.EventInformation
+import com.techullurgy.contactsapp.domain.model.PhoneInformation
 import kotlinx.coroutines.launch
 
 class DeviceContactCreateUpdateScreenViewModel(
@@ -19,67 +24,65 @@ class DeviceContactCreateUpdateScreenViewModel(
     var phones = mutableStateListOf(mutableStateOf("Home" to ""))
     var emails = mutableStateListOf(mutableStateOf("Home" to ""))
     var events = mutableStateListOf(mutableStateOf("Birthday" to ""))
+    var error by mutableStateOf("")
 
     private var _contactId = ""
 
     fun loadForUpdate(contactId: String) {
         _contactId = contactId
-//        viewModelScope.launch {
-//            when(val result = contactsRepository.getDeviceContactDetailFor(contactId)) {
-//                is ServiceResult.Failure -> {
-//                    _state.update {
-//                        it.copy(
-//                            error = result.error
-//                        )
-//                    }
-//                }
-//                is ServiceResult.Success -> {
-//                    _state.update {
-//                        it.copy(
-//                            contactId = contactId,
-//                            firstName = result.data.firstName,
-//                            lastName = result.data.lastName,
-//                        )
-//                    }
-//                    events = result.data.events.map { info ->
-//                        when(info) {
-//                            is EventInformation.AnniversaryEvent -> {
-//                                "Anniversary" to info.eventDate
-//                            }
-//                            is EventInformation.BirthdayEvent -> {
-//                                "Birthday" to info.eventDate
-//                            }
-//                        }
-//                    }.toMutableStateList()
-//                    phones = result.data.phones.map { info ->
-//                        when(info) {
-//                            is PhoneInformation.HomePhone -> {
-//                                "Home" to info.phoneNo
-//                            }
-//                            is PhoneInformation.MobilePhone -> {
-//                                "Mobile" to info.phoneNo
-//                            }
-//                            is PhoneInformation.WorkPhone -> {
-//                                "Work" to info.phoneNo
-//                            }
-//                        }
-//                    }.toMutableStateList()
-//                    emails = result.data.emails.map { info ->
-//                        when(info) {
-//                            is EmailInformation.HomeEmail -> {
-//                                "Home" to info.email
-//                            }
-//                            is EmailInformation.MobileEmail -> {
-//                                "Mobile" to info.email
-//                            }
-//                            is EmailInformation.WorkEmail -> {
-//                                "Work" to info.email
-//                            }
-//                        }
-//                    }.toMutableStateList()
-//                }
-//            }
-//        }
+        viewModelScope.launch {
+            when (val result = contactsRepository.getDeviceContactDetailFor(contactId)) {
+                is ServiceResult.Failure -> {
+                    error = result.error
+                }
+
+                is ServiceResult.Success -> {
+                    firstName = result.data.firstName
+                    lastName = result.data.lastName
+                    events = result.data.events.map { info ->
+                        when (info) {
+                            is EventInformation.AnniversaryEvent -> {
+                                mutableStateOf("Anniversary" to info.eventDate)
+                            }
+
+                            is EventInformation.BirthdayEvent -> {
+                                mutableStateOf("Birthday" to info.eventDate)
+                            }
+                        }
+                    }.toMutableStateList()
+                    phones = result.data.phones.map { info ->
+                        when (info) {
+                            is PhoneInformation.HomePhone -> {
+                                mutableStateOf("Home" to info.phoneNo)
+                            }
+
+                            is PhoneInformation.MobilePhone -> {
+                                mutableStateOf("Mobile" to info.phoneNo)
+                            }
+
+                            is PhoneInformation.WorkPhone -> {
+                                mutableStateOf("Work" to info.phoneNo)
+                            }
+                        }
+                    }.toMutableStateList()
+                    emails = result.data.emails.map { info ->
+                        when (info) {
+                            is EmailInformation.HomeEmail -> {
+                                mutableStateOf("Home" to info.email)
+                            }
+
+                            is EmailInformation.MobileEmail -> {
+                                mutableStateOf("Mobile" to info.email)
+                            }
+
+                            is EmailInformation.WorkEmail -> {
+                                mutableStateOf("Work" to info.email)
+                            }
+                        }
+                    }.toMutableStateList()
+                }
+            }
+        }
     }
 
     fun onEvent(event: DeviceContactCreateUpdateScreenEvent) {
@@ -145,9 +148,9 @@ class DeviceContactCreateUpdateScreenViewModel(
                     val request = DeviceContactRequest(
                         firstName = firstName,
                         lastName = lastName,
-                        phone = phones.filter { it.value.second.isNotEmpty() }.map { it.value },
-                        email = emails.filter { it.value.second.isNotEmpty() }.map { it.value },
-                        event = events.filter { it.value.second.isNotEmpty() }.map { it.value }
+                        phone = phones.filter { it.value.second.isNotBlank() }.map { it.value },
+                        email = emails.filter { it.value.second.isNotBlank() }.map { it.value },
+                        event = events.filter { it.value.second.isNotBlank() }.map { it.value }
                     )
                     contactsRepository.saveDeviceContact(contactId = _contactId, request = request)
                     event.onSaved()
@@ -155,7 +158,7 @@ class DeviceContactCreateUpdateScreenViewModel(
             }
 
             is DeviceContactCreateUpdateScreenEvent.OnEmailTypeChange -> {
-                emails[event.index].value = event.value to events[event.index].value.second
+                emails[event.index].value = event.value to emails[event.index].value.second
             }
 
             is DeviceContactCreateUpdateScreenEvent.OnEventTypeChange -> {
