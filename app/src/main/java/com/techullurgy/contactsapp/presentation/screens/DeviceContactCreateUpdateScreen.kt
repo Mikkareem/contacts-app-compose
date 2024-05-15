@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
@@ -28,15 +26,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,7 +45,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techullurgy.contactsapp.presentation.components.ContactTextField
-import com.techullurgy.contactsapp.presentation.models.DeviceContactCreateUpdateScreenState
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactCreateUpdateScreenEvent
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactCreateUpdateScreenViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -59,23 +55,37 @@ fun DeviceContactCreateUpdateScreen(
     onBack: () -> Unit,
     isEditRequest: Boolean = false
 ) {
-    val state by viewModel.state.collectAsState()
+    val firstName = viewModel.firstName
+    val lastName = viewModel.lastName
+    val phones = viewModel.phones
+    val emails = viewModel.emails
+    val events = viewModel.events
 
     DeviceContactCreateUpdateScreen(
-        state = state,
         onEvent = viewModel::onEvent,
         onBack = onBack,
-        isEditRequest = isEditRequest
+        isEditRequest = isEditRequest,
+        firstName = firstName,
+        lastName = lastName,
+        phones = phones,
+        emails = emails,
+        events = events,
+        error = ""
     )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DeviceContactCreateUpdateScreen(
-    state: DeviceContactCreateUpdateScreenState,
     onEvent: (DeviceContactCreateUpdateScreenEvent) -> Unit,
     onBack: () -> Unit,
-    isEditRequest: Boolean
+    isEditRequest: Boolean,
+    firstName: String,
+    lastName: String,
+    phones: SnapshotStateList<MutableState<Pair<String, String>>>,
+    emails: SnapshotStateList<MutableState<Pair<String, String>>>,
+    events: SnapshotStateList<MutableState<Pair<String, String>>>,
+    error: String
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -121,13 +131,13 @@ fun DeviceContactCreateUpdateScreen(
             ) {
                 item {
                     NameField(
-                        firstName = state.firstName,
+                        firstName = firstName,
                         onFirstNameChange = {
                             onEvent(
                                 DeviceContactCreateUpdateScreenEvent.OnFirstNameChange(it)
                             )
                         },
-                        lastName = state.lastName,
+                        lastName = lastName,
                         onLastNameChange = {
                             onEvent(
                                 DeviceContactCreateUpdateScreenEvent.OnLastNameChange(it)
@@ -136,19 +146,27 @@ fun DeviceContactCreateUpdateScreen(
                     )
                 }
 
-                itemsIndexed(state.phones, key = { index, it -> "${it.hashCode()}-$index" }) { index, pair ->
+                itemsIndexed(
+                    phones,
+                    key = { index, it -> "${it.hashCode()}-$index" }) { index, pair ->
                     PhoneField(
                         modifier = Modifier.animateItemPlacement(),
-                        value = pair.second,
+                        value = pair.value.second,
                         onValueChange = {
                             onEvent(
-                                DeviceContactCreateUpdateScreenEvent.OnPhoneChange(value = it, type = pair.first, index = index)
+                                DeviceContactCreateUpdateScreenEvent.OnPhoneChange(
+                                    value = it,
+                                    index = index
+                                )
                             )
                         },
-                        type = pair.first,
+                        type = pair.value.first,
                         onTypeChange = {
                             onEvent(
-                                DeviceContactCreateUpdateScreenEvent.OnPhoneChange(value = pair.second, type = it, index = index)
+                                DeviceContactCreateUpdateScreenEvent.OnPhoneTypeChange(
+                                    value = it,
+                                    index = index
+                                )
                             )
                         },
                         closeable = index != 0,
@@ -160,7 +178,7 @@ fun DeviceContactCreateUpdateScreen(
                     )
                 }
 
-                if(state.phones.size < 3) {
+                if (phones.size < 3) {
                     item(key = "Add Phone") {
                         TextButton(
                             onClick = {
@@ -174,19 +192,27 @@ fun DeviceContactCreateUpdateScreen(
                     }
                 }
 
-                itemsIndexed(state.emails, key = { index, it -> "$index-${it.hashCode()}-${it.first}" }) { index, pair ->
+                itemsIndexed(
+                    emails,
+                    key = { index, it -> "$index-${it.hashCode()}-${it}" }) { index, pair ->
                     EmailField(
                         modifier = Modifier.animateItemPlacement(),
-                        value = pair.second,
+                        value = pair.value.second,
                         onValueChange = {
                             onEvent(
-                                DeviceContactCreateUpdateScreenEvent.OnEmailChange(value = it, type = pair.first, index = index)
+                                DeviceContactCreateUpdateScreenEvent.OnEmailChange(
+                                    value = it,
+                                    index = index
+                                )
                             )
                         },
-                        type = pair.first,
+                        type = pair.value.first,
                         onTypeChange = {
                             onEvent(
-                                DeviceContactCreateUpdateScreenEvent.OnEmailChange(value = pair.second, type = it, index = index)
+                                DeviceContactCreateUpdateScreenEvent.OnEmailTypeChange(
+                                    value = it,
+                                    index = index
+                                )
                             )
                         },
                         closeable = index != 0,
@@ -198,7 +224,7 @@ fun DeviceContactCreateUpdateScreen(
                     )
                 }
 
-                if(state.emails.size < 3) {
+                if (emails.size < 3) {
                     item(key = "Add Email") {
                         TextButton(
                             onClick = {
@@ -212,19 +238,27 @@ fun DeviceContactCreateUpdateScreen(
                     }
                 }
 
-                itemsIndexed(state.events, key = { index, it -> "$index-${it.hashCode()}" }) { index, pair ->
+                itemsIndexed(
+                    events,
+                    key = { index, it -> "$index-${it.hashCode()}" }) { index, pair ->
                     EventField(
                         modifier = Modifier.animateItemPlacement(),
-                        value = pair.second,
+                        value = pair.value.second,
                         onValueChange = {
                             onEvent(
-                                DeviceContactCreateUpdateScreenEvent.OnEventChange(value = it, type = pair.first, index = index)
+                                DeviceContactCreateUpdateScreenEvent.OnEventChange(
+                                    value = it,
+                                    index = index
+                                )
                             )
                         },
-                        type = pair.first,
+                        type = pair.value.first,
                         onTypeChange = {
                             onEvent(
-                                DeviceContactCreateUpdateScreenEvent.OnEventChange(value = pair.second, type = it, index = index)
+                                DeviceContactCreateUpdateScreenEvent.OnEventTypeChange(
+                                    value = it,
+                                    index = index
+                                )
                             )
                         },
                         closeable = index != 0,
@@ -236,7 +270,7 @@ fun DeviceContactCreateUpdateScreen(
                     )
                 }
 
-                if(state.events.size < 2) {
+                if (events.size < 2) {
                     item(key = "Add Event") {
                         TextButton(
                             onClick = {
@@ -255,12 +289,12 @@ fun DeviceContactCreateUpdateScreen(
                         Button(
                             onClick = {
                                 onEvent(
-                                    DeviceContactCreateUpdateScreenEvent.OnUpdate(contactId = state.contactId) {
+                                    DeviceContactCreateUpdateScreenEvent.OnUpdate {
                                         onBack()
                                     }
                                 )
                             },
-                            enabled = state.creatable && state.editable
+                            enabled = firstName.isNotBlank() && phones.any { it.value.second.isNotBlank() }
                         ) {
                             Text(text = "Update")
                         }
@@ -273,13 +307,13 @@ fun DeviceContactCreateUpdateScreen(
                                     }
                                 )
                             },
-                            enabled = state.creatable
+                            enabled = firstName.isNotBlank() && phones.any { it.value.second.isNotBlank() }
                         ) {
                             Text(text = "Create")
                         }
                     }
-                    if(state.error.isNotBlank()) {
-                        Text(text = state.error, color = Color.Red)
+                    if (error.isNotBlank()) {
+                        Text(text = error, color = Color.Red)
                     }
                 }
             }
@@ -318,8 +352,9 @@ fun NameField(
     }
 }
 
+@Stable
 @Composable
-private fun PhoneField(
+fun PhoneField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,

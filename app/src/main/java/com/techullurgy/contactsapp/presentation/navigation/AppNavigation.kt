@@ -41,6 +41,7 @@ fun AppNavigation(
             route = Screen.GlobalSearch.name
         ) {
             GlobalSearchScreenWithNavigation(navController = navController)
+
         }
 
         composable(

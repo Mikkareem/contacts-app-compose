@@ -16,7 +16,9 @@ fun ContactTextField(
     OutlinedTextField(
         modifier = modifier,
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = {
+            onValueChange(it)
+        },
         singleLine = true,
         placeholder = {
             Text(
