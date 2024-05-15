@@ -21,4 +21,7 @@ interface LocalContactsDao {
 
     @Query("Select * from LocalContact where displayName LIKE '%' || :query || '%' order by displayName ASC")
     suspend fun getSearchResultsFor(query: String): List<LocalContact>
+
+    @Query("Select Max(page) from LocalContact")
+    suspend fun getAvailableMaxPage(): Int
 }

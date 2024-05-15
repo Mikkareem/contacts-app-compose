@@ -48,7 +48,7 @@ fun RandomContactListItem(
                     contentDescription = null
                 )
             }
-            Text(text = contact.name)
+            Text(text = contact.firstName)
         }
     }
 }

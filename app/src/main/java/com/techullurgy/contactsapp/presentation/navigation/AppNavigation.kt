@@ -14,9 +14,11 @@ import androidx.navigation.navArgument
 import com.techullurgy.contactsapp.presentation.screens.DeviceContactCreateUpdateScreen
 import com.techullurgy.contactsapp.presentation.screens.DeviceContactDetailScreen
 import com.techullurgy.contactsapp.presentation.screens.GlobalSearchScreen
+import com.techullurgy.contactsapp.presentation.screens.RandomContactCreateUpdateScreen
 import com.techullurgy.contactsapp.presentation.screens.RandomContactDetailScreen
 import com.techullurgy.contactsapp.presentation.screens.TabsScreen
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactCreateUpdateScreenViewModel
+import com.techullurgy.contactsapp.presentation.viewmodels.RandomContactCreateUpdateScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -41,7 +43,6 @@ fun AppNavigation(
             route = Screen.GlobalSearch.name
         ) {
             GlobalSearchScreenWithNavigation(navController = navController)
-
         }
 
         composable(
@@ -56,7 +57,19 @@ fun AppNavigation(
         ) {
             val contactId = it.arguments?.getLong(Screen.RandomDetail.ID)
 
-            RandomContactDetailScreen(contactId = contactId!!)
+            val onContactEditClick: () -> Unit = {
+                navController.navigate(
+                    Screen.EditRandom(contactId!!).url
+                ) {
+                    launchSingleTop = true
+                }
+            }
+
+            RandomContactDetailScreen(
+                contactId = contactId!!,
+                onContactEditClick = onContactEditClick,
+                onBack = { navController.popBackStack() }
+            )
         }
 
         composable(
@@ -81,14 +94,17 @@ fun AppNavigation(
 
             DeviceContactDetailScreen(
                 contactId = contactId!!,
-                onContactEditClick = onContactEditClick
+                onContactEditClick = onContactEditClick,
+                onBack = { navController.popBackStack() }
             )
         }
 
         composable(
             route = Screen.AddRandom.name
         ) {
-
+            RandomContactCreateUpdateScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
 
         composable(
@@ -111,7 +127,19 @@ fun AppNavigation(
         ) {
             val contactId = it.arguments?.getLong(Screen.EditRandom.ID)
 
+            val viewModel: RandomContactCreateUpdateScreenViewModel = koinViewModel()
 
+            LaunchedEffect(key1 = contactId) {
+                contactId?.let {
+                    viewModel.loadForUpdate(contactId)
+                }
+            }
+
+            RandomContactCreateUpdateScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                isEditRequest = true
+            )
         }
 
         composable(

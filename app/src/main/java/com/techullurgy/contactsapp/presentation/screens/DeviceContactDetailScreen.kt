@@ -16,9 +16,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techullurgy.contactsapp.domain.model.DeviceContactDetail
@@ -39,6 +42,7 @@ import org.koin.androidx.compose.koinViewModel
 fun DeviceContactDetailScreen(
     contactId: String,
     viewModel: DeviceContactDetailViewModel = koinViewModel(),
+    onBack: () -> Unit,
     onContactEditClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
@@ -50,6 +54,7 @@ fun DeviceContactDetailScreen(
     DeviceContactDetailScreen(
         contact = state.contactDetail,
         error = state.error,
+        onBack = onBack,
         onContactEditClick = onContactEditClick
     )
 }
@@ -58,16 +63,29 @@ fun DeviceContactDetailScreen(
 private fun DeviceContactDetailScreen(
     contact: DeviceContactDetail?,
     error: String,
+    onBack: () -> Unit,
     onContactEditClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
             Row(
                 modifier = Modifier
-                    .background(Color.Green)
+                    .background(MaterialTheme.colorScheme.primary)
                     .statusBarsPadding()
-                    .displayCutoutPadding()
+                    .displayCutoutPadding(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null
+                    )
+                }
+                Text(
+                    text = "Details",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(onClick = onContactEditClick) {
                     Icon(imageVector = Icons.Filled.Create, contentDescription = null)
