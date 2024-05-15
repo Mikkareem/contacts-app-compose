@@ -1,10 +1,15 @@
 package com.techullurgy.contactsapp.presentation.navigation
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,10 +22,14 @@ import com.techullurgy.contactsapp.presentation.screens.GlobalSearchScreen
 import com.techullurgy.contactsapp.presentation.screens.RandomContactCreateUpdateScreen
 import com.techullurgy.contactsapp.presentation.screens.RandomContactDetailScreen
 import com.techullurgy.contactsapp.presentation.screens.TabsScreen
+import com.techullurgy.contactsapp.presentation.screens.TwoPaneDeviceContactDetailScreen
+import com.techullurgy.contactsapp.presentation.screens.TwoPaneRandomContactDetailScreen
+import com.techullurgy.contactsapp.presentation.screens.TwoPaneScreen
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactCreateUpdateScreenViewModel
 import com.techullurgy.contactsapp.presentation.viewmodels.RandomContactCreateUpdateScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun AppNavigation(
     navController: NavHostController = rememberNavController()
@@ -65,11 +74,26 @@ fun AppNavigation(
                 }
             }
 
-            RandomContactDetailScreen(
-                contactId = contactId!!,
-                onContactEditClick = onContactEditClick,
-                onBack = { navController.popBackStack() }
-            )
+            val windowSizeClass =
+                calculateWindowSizeClass(activity = LocalContext.current as Activity)
+
+            when (windowSizeClass.widthSizeClass) {
+                WindowWidthSizeClass.Compact -> {
+                    RandomContactDetailScreen(
+                        contactId = contactId!!,
+                        onContactEditClick = onContactEditClick,
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+
+                else -> {
+                    TwoPaneRandomContactDetailScreen(
+                        contactId = contactId!!,
+                        onContactEditClick = onContactEditClick,
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+            }
         }
 
         composable(
@@ -92,11 +116,26 @@ fun AppNavigation(
                 }
             }
 
-            DeviceContactDetailScreen(
-                contactId = contactId!!,
-                onContactEditClick = onContactEditClick,
-                onBack = { navController.popBackStack() }
-            )
+            val windowSizeClass =
+                calculateWindowSizeClass(activity = LocalContext.current as Activity)
+
+            when (windowSizeClass.widthSizeClass) {
+                WindowWidthSizeClass.Compact -> {
+                    DeviceContactDetailScreen(
+                        contactId = contactId!!,
+                        onContactEditClick = onContactEditClick,
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+
+                else -> {
+                    TwoPaneDeviceContactDetailScreen(
+                        contactId = contactId!!,
+                        onContactEditClick = onContactEditClick,
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+            }
         }
 
         composable(
@@ -171,6 +210,7 @@ fun AppNavigation(
     }
 }
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 private fun AnimatedContentScope.InitialScreen(navController: NavHostController) {
     val onRandomContactClick: (id: Long) -> Unit = {
@@ -213,13 +253,27 @@ private fun AnimatedContentScope.InitialScreen(navController: NavHostController)
         }
     }
 
-    TabsScreen(
-        onRandomContactClick = onRandomContactClick,
-        onDeviceContactClick = onDeviceContactClick,
-        onAddDeviceClick = onAddDeviceContactClick,
-        onAddRandomClick = onAddRandomContactClick,
-        onGlobalSearchClick = onGlobalSearchClick
-    )
+    val windowSizeClass = calculateWindowSizeClass(activity = LocalContext.current as Activity)
+
+    when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            TabsScreen(
+                onRandomContactClick = onRandomContactClick,
+                onDeviceContactClick = onDeviceContactClick,
+                onAddDeviceClick = onAddDeviceContactClick,
+                onAddRandomClick = onAddRandomContactClick,
+                onGlobalSearchClick = onGlobalSearchClick
+            )
+        }
+
+        else -> {
+            TwoPaneScreen(
+                onRandomContactClick = onRandomContactClick,
+                onDeviceContactClick = onDeviceContactClick
+            )
+        }
+    }
+
 }
 
 @Composable

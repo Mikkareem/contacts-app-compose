@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,7 +49,7 @@ import com.techullurgy.contactsapp.presentation.viewmodels.RandomContactDetailVi
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun RandomContactDetailScreen(
+fun TwoPaneRandomContactDetailScreen(
     contactId: Long,
     viewModel: RandomContactDetailViewModel = koinViewModel(),
     onBack: () -> Unit,
@@ -60,7 +61,7 @@ fun RandomContactDetailScreen(
         viewModel.getContactDetail(contactId)
     }
 
-    RandomContactDetailScreen(
+    TwoPaneRandomContactDetailScreen(
         contact = state.randomContact,
         error = state.error,
         onContactEditClick = onContactEditClick,
@@ -69,7 +70,7 @@ fun RandomContactDetailScreen(
 }
 
 @Composable
-private fun RandomContactDetailScreen(
+private fun TwoPaneRandomContactDetailScreen(
     contact: RandomContact?,
     error: String,
     onBack: () -> Unit,
@@ -104,12 +105,10 @@ private fun RandomContactDetailScreen(
             }
         }
     ) { pd ->
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(pd),
-            verticalArrangement = Arrangement.Center
+                .padding(pd)
         ) {
             if (error.isNotEmpty()) {
                 Box(
@@ -121,7 +120,9 @@ private fun RandomContactDetailScreen(
             } else {
                 contact?.let {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -155,7 +156,16 @@ private fun RandomContactDetailScreen(
                         }
                         Spacer(modifier = Modifier.height(24.dp))
                         Text(text = it.displayName, fontSize = 30.sp)
-                        Spacer(modifier = Modifier.height(48.dp))
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
                             text = buildAnnotatedString {
                                 withStyle(
@@ -224,7 +234,6 @@ private fun RandomContactDetailScreen(
                     }
                 }
             }
-
         }
     }
 }

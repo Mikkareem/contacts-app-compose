@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -49,7 +50,7 @@ import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactDetailVi
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun DeviceContactDetailScreen(
+fun TwoPaneDeviceContactDetailScreen(
     contactId: String,
     viewModel: DeviceContactDetailViewModel = koinViewModel(),
     onBack: () -> Unit,
@@ -61,7 +62,7 @@ fun DeviceContactDetailScreen(
         viewModel.getContactDetail(contactId)
     }
 
-    DeviceContactDetailScreen(
+    TwoPaneDeviceContactDetailScreen(
         contact = state.contactDetail,
         error = state.error,
         onBack = onBack,
@@ -70,7 +71,7 @@ fun DeviceContactDetailScreen(
 }
 
 @Composable
-private fun DeviceContactDetailScreen(
+private fun TwoPaneDeviceContactDetailScreen(
     contact: DeviceContactDetail?,
     error: String,
     onBack: () -> Unit,
@@ -103,14 +104,13 @@ private fun DeviceContactDetailScreen(
             }
         }
     ) {
-        Column(
+        Row(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
                 .padding(it)
                 .padding(16.dp)
-                .fillMaxSize()
         ) {
-            if(error.isNotEmpty()) {
+            if (error.isNotEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -120,7 +120,9 @@ private fun DeviceContactDetailScreen(
             } else {
                 contact?.let {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -134,8 +136,18 @@ private fun DeviceContactDetailScreen(
                             Text(text = it.initials, fontSize = 42.sp)
                         }
                         Spacer(modifier = Modifier.height(24.dp))
-                        Text(text = it.firstName, fontSize = 30.sp)
-                        Spacer(modifier = Modifier.height(48.dp))
+                        Text(text = it.displayName, fontSize = 30.sp)
+                    }
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .verticalScroll(
+                                rememberScrollState()
+                            ),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         if (it.phones.isNotEmpty()) {
                             Card(
                                 modifier = Modifier
