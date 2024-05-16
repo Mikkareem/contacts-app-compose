@@ -8,6 +8,7 @@ This app is built for managing the Random contacts as well as the Device Contact
 - Kotlinx serialization for JSON Parsing
 - Compose Navigation for Multiple screen navigation
 - Koin for Dependency Injection
+- Coil for Image loading
 - Adaptive UI for Different Screen Sizes
 - Usage of Kotlin Specific features like (Extension functions, Sealed Class/Interfaces)
 - Type safe URL building for navigation and API Calls
