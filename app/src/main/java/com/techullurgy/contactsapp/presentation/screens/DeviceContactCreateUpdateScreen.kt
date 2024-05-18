@@ -42,7 +42,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.techullurgy.contactsapp.presentation.components.ContactTextField
+import com.techullurgy.contactsapp.presentation.components.DateContactTextField
+import com.techullurgy.contactsapp.presentation.components.EmailContactTextField
+import com.techullurgy.contactsapp.presentation.components.NameContactTextField
+import com.techullurgy.contactsapp.presentation.components.PhoneContactTextField
 import com.techullurgy.contactsapp.presentation.components.TypeSelector
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactCreateUpdateScreenEvent
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactCreateUpdateScreenViewModel
@@ -335,14 +338,14 @@ fun NameField(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(text = "First Name", fontWeight = FontWeight.Bold)
-            ContactTextField(
+            NameContactTextField(
                 value = firstName,
                 onValueChange = onFirstNameChange,
                 placeholder = "First Name"
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "Last Name", fontWeight = FontWeight.Bold)
-            ContactTextField(
+            NameContactTextField(
                 value = lastName,
                 onValueChange = onLastNameChange,
                 placeholder = "Last Name"
@@ -378,7 +381,7 @@ fun PhoneField(
                 )
             }
             Text(text = "Phone", fontWeight = FontWeight.Bold)
-            ContactTextField(
+            PhoneContactTextField(
                 value = value,
                 onValueChange = onValueChange,
                 placeholder = "Phone"
@@ -420,7 +423,7 @@ private fun EmailField(
                 )
             }
             Text(text = "Email", fontWeight = FontWeight.Bold)
-            ContactTextField(
+            EmailContactTextField(
                 value = value,
                 onValueChange = onValueChange,
                 placeholder = "Email"
@@ -462,7 +465,7 @@ private fun EventField(
                 )
             }
             Text(text = "Event", fontWeight = FontWeight.Bold)
-            ContactTextField(
+            DateContactTextField(
                 value = value,
                 onValueChange = onValueChange,
                 placeholder = "YYYY/MM/DD"
