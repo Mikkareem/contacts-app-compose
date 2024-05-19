@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -145,15 +144,42 @@ private fun GlobalSearchScreenPreview() {
         GlobalSearchScreen(
             state = GlobalSearchScreenState(
                 randoms = listOf(
-                    RandomContact(id=0, name = "Rahul", phone = "", gender = "", email = "", profileMedium = ""),
-                    RandomContact(id=0, name = "Rahul", phone = "", gender = "", email = "", profileMedium = ""),
-                    RandomContact(id=0, name = "Rahul", phone = "", gender = "", email = "", profileMedium = ""),
+                    RandomContact(
+                        id = 0,
+                        firstName = "Rahul",
+                        phone = "",
+                        gender = "",
+                        email = "",
+                        profileMedium = "",
+                        lastName = "",
+                        cell = ""
+                    ),
+                    RandomContact(
+                        id = 0,
+                        firstName = "Rahul",
+                        phone = "",
+                        gender = "",
+                        email = "",
+                        profileMedium = "",
+                        lastName = "",
+                        cell = ""
+                    ),
+                    RandomContact(
+                        id = 0,
+                        firstName = "Rahul",
+                        phone = "",
+                        gender = "",
+                        email = "",
+                        profileMedium = "",
+                        lastName = "",
+                        cell = ""
+                    ),
                 ),
                 devices = listOf(
                     DeviceContact("", "Irsath Kareem"),
                     DeviceContact("", "Irsath Kareem"),
                     DeviceContact("", "Irsath Kareem"),
-                )
+                ),
             ),
             onQuery = {},
             onDeviceContactClick = {},

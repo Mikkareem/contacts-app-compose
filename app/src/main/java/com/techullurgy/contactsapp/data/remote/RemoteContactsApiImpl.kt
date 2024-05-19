@@ -1,6 +1,5 @@
 package com.techullurgy.contactsapp.data.remote
 
-import com.techullurgy.contactsapp.data.local.LocalContactsManager
 import com.techullurgy.contactsapp.data.remote.responses.RemoteContactResponse
 import com.techullurgy.contactsapp.data.utils.Endpoint
 import com.techullurgy.contactsapp.data.utils.ServiceResult
@@ -34,7 +33,9 @@ internal class RemoteContactsApiImpl(
                 else -> ServiceResult.Failure("Unknown Error")
             }
         } catch(e: Exception) {
-            ServiceResult.Failure(e.message!!)
+            ServiceResult.Failure(
+                e.message ?: "Seems network is missing, Please check your Internet Connection"
+            )
         }
     }
 }

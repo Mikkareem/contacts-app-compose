@@ -36,7 +36,7 @@ sealed class Screen(val name: String) {
     data object AddDevice: Screen("add-device")
 
     class EditRandom(
-        id: String
+        id: Long
     ): Screen(ROUTE) {
         val url = "edit-random/$id"
 

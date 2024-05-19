@@ -13,7 +13,8 @@ class LocalContactsManager(
         val localContacts = contacts.map { contact ->
             LocalContact(
                 id = 0,
-                displayName = contact.name.first + " " + contact.name.last,
+                firstName = contact.name.first,
+                lastName = contact.name.last,
                 gender = contact.gender,
                 phone = contact.phone,
                 cell = contact.cell,
@@ -26,7 +27,11 @@ class LocalContactsManager(
         localContactsDao.saveContact(*localContacts.toTypedArray())
     }
 
+    suspend fun saveContact(localContact: LocalContact) = localContactsDao.saveContact(localContact)
+
     suspend fun getContactDetailFor(contactId: Long): LocalContact? = localContactsDao.getContactById(contactId = contactId)
 
     suspend fun getSearchResultsFor(query: String) = localContactsDao.getSearchResultsFor(query)
+
+    suspend fun getLastAvailablePage(): Int = localContactsDao.getAvailableMaxPage()
 }

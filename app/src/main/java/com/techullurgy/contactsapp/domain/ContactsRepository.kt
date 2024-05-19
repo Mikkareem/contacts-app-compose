@@ -2,6 +2,7 @@ package com.techullurgy.contactsapp.domain
 
 import com.techullurgy.contactsapp.data.device.DeviceContactsManager
 import com.techullurgy.contactsapp.data.local.LocalContactsManager
+import com.techullurgy.contactsapp.data.local.room.entities.LocalContact
 import com.techullurgy.contactsapp.data.remote.RemoteContactsApi
 import com.techullurgy.contactsapp.data.utils.ServiceResult
 import com.techullurgy.contactsapp.domain.mappers.toRandomContact
@@ -34,8 +35,12 @@ class ContactsRepository(
         return localContactsManager.getContactDetailFor(contactId = contactId)?.toRandomContact()
     }
 
+    suspend fun getLastAvailablePage() = localContactsManager.getLastAvailablePage()
+
     suspend fun saveDeviceContact(request: DeviceContactRequest) = deviceContactsManager.addNewContact(request)
     suspend fun saveDeviceContact(contactId: String, request: DeviceContactRequest) = deviceContactsManager.editContact(contactId, request)
+    suspend fun saveRandomContact(contact: LocalContact) =
+        localContactsManager.saveContact(localContact = contact)
 
     suspend fun getDeviceContactsSearchResults(query: String) = deviceContactsManager.getSearchResultsFor(query)
     suspend fun getLocalContactsSearchResults(query: String) = localContactsManager.getSearchResultsFor(query)

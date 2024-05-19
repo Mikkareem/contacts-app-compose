@@ -8,18 +8,12 @@ data class DeviceContactDetail(
     val emails: List<EmailInformation>,
     val events: List<EventInformation>,
 ) {
-    val initials: String
-        get() = (firstName.getFirstCharAfterFirstSpace() ?: firstName.take(2)).uppercase()
+    val displayName = "$firstName $lastName"
 
-    private fun String.getFirstCharAfterFirstSpace(): String? =
-        trim().
-            takeIf {
-                it.indexOf(" ") != -1
-            }
-            ?.let {
-                val names = split(" ").filter { it.isNotBlank() }.take(2)
-                names[0][0] + "" + names[1][0]
-            }
+    val initials: String
+        get() = if (lastName.isNotBlank()) "${firstName.take(1)}${lastName.take(1)}" else firstName.take(
+            2
+        )
 }
 
 sealed interface PhoneInformation {

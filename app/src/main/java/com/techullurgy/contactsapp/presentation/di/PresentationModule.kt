@@ -4,6 +4,7 @@ import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactCreateUp
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactDetailViewModel
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactsViewModel
 import com.techullurgy.contactsapp.presentation.viewmodels.GlobalSearchScreenViewModel
+import com.techullurgy.contactsapp.presentation.viewmodels.RandomContactCreateUpdateScreenViewModel
 import com.techullurgy.contactsapp.presentation.viewmodels.RandomContactDetailViewModel
 import com.techullurgy.contactsapp.presentation.viewmodels.RandomContactsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -14,6 +15,7 @@ val presentationModule = module {
     viewModel { DeviceContactsViewModel(get()) }
     viewModel { DeviceContactDetailViewModel(get()) }
     viewModel { RandomContactDetailViewModel(get()) }
-    viewModel { DeviceContactCreateUpdateScreenViewModel(get()) }
     viewModel { GlobalSearchScreenViewModel(get()) }
+    viewModel { DeviceContactCreateUpdateScreenViewModel(get()) }
+    viewModel { RandomContactCreateUpdateScreenViewModel(get()) }
 }

@@ -7,7 +7,9 @@ import androidx.room.PrimaryKey
 data class LocalContact(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val displayName: String,
+    val firstName: String,
+    val lastName: String,
+    val displayName: String = "$firstName $lastName",
     val gender: String,
     val phone: String,
     val cell: String,

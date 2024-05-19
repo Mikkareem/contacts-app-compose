@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,7 +35,6 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
@@ -44,7 +42,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.techullurgy.contactsapp.presentation.components.ContactTextField
+import com.techullurgy.contactsapp.presentation.components.DateContactTextField
+import com.techullurgy.contactsapp.presentation.components.EmailContactTextField
+import com.techullurgy.contactsapp.presentation.components.NameContactTextField
+import com.techullurgy.contactsapp.presentation.components.PhoneContactTextField
+import com.techullurgy.contactsapp.presentation.components.TypeSelector
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactCreateUpdateScreenEvent
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactCreateUpdateScreenViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -336,14 +338,14 @@ fun NameField(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(text = "First Name", fontWeight = FontWeight.Bold)
-            ContactTextField(
+            NameContactTextField(
                 value = firstName,
                 onValueChange = onFirstNameChange,
                 placeholder = "First Name"
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "Last Name", fontWeight = FontWeight.Bold)
-            ContactTextField(
+            NameContactTextField(
                 value = lastName,
                 onValueChange = onLastNameChange,
                 placeholder = "Last Name"
@@ -379,7 +381,7 @@ fun PhoneField(
                 )
             }
             Text(text = "Phone", fontWeight = FontWeight.Bold)
-            ContactTextField(
+            PhoneContactTextField(
                 value = value,
                 onValueChange = onValueChange,
                 placeholder = "Phone"
@@ -421,7 +423,7 @@ private fun EmailField(
                 )
             }
             Text(text = "Email", fontWeight = FontWeight.Bold)
-            ContactTextField(
+            EmailContactTextField(
                 value = value,
                 onValueChange = onValueChange,
                 placeholder = "Email"
@@ -463,7 +465,7 @@ private fun EventField(
                 )
             }
             Text(text = "Event", fontWeight = FontWeight.Bold)
-            ContactTextField(
+            DateContactTextField(
                 value = value,
                 onValueChange = onValueChange,
                 placeholder = "YYYY/MM/DD"
@@ -475,49 +477,6 @@ private fun EventField(
                 selectedType = type,
                 onSelectionChange = onTypeChange
             )
-        }
-    }
-}
-
-@Composable
-private fun TypeSelector(
-    modifier: Modifier = Modifier,
-    label: String,
-    types: List<String>,
-    selectedType: String,
-    onSelectionChange: (String) -> Unit
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(text = label, fontWeight = FontWeight.Bold)
-
-        Row {
-            types.forEach {
-                Box(
-                    modifier = Modifier
-                        .clip(
-                            MaterialTheme.shapes.medium
-                        )
-                        .run {
-                            if (it == selectedType) {
-                                background(MaterialTheme.colorScheme.primary)
-                            } else this
-                        }
-                        .clickable {
-                            onSelectionChange(it)
-                        }
-                        .padding(8.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = it,
-                        fontWeight = if(it == selectedType) FontWeight.Bold else null
-                    )
-                }
-            }
         }
     }
 }

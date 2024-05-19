@@ -6,9 +6,12 @@ import com.techullurgy.contactsapp.domain.model.RandomContact
 
 fun LocalContact.toRandomContact(): RandomContact = RandomContact(
     id = id,
-    name = displayName,
+    firstName = firstName,
+    lastName = lastName,
     phone = phone,
     gender = gender,
     email = email,
-    profileMedium = picture
+    cell = cell,
+    profileMedium = picture,
+    page = page
 )
