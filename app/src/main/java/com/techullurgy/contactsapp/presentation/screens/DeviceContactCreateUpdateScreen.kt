@@ -62,6 +62,7 @@ fun DeviceContactCreateUpdateScreen(
     val phones = viewModel.phones
     val emails = viewModel.emails
     val events = viewModel.events
+    val error = viewModel.error
 
     DeviceContactCreateUpdateScreen(
         onEvent = viewModel::onEvent,
@@ -72,7 +73,7 @@ fun DeviceContactCreateUpdateScreen(
         phones = phones,
         emails = emails,
         events = events,
-        error = ""
+        error = error
     )
 }
 

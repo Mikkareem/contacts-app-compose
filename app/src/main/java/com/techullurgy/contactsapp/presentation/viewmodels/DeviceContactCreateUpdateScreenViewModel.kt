@@ -85,6 +85,33 @@ class DeviceContactCreateUpdateScreenViewModel(
         }
     }
 
+    private fun validate(): Boolean {
+        val set = HashSet<String>()
+        phones.filter { it.value.second.isNotEmpty() }.forEach {
+            if (!set.add(it.value.first)) {
+                error = "${it.value.first} Phone is available more than once"
+                return false
+            }
+        }
+        set.clear()
+        emails.filter { it.value.second.isNotEmpty() }.forEach {
+            if (!set.add(it.value.first)) {
+                error = "${it.value.first} Email is available more than once"
+                return false
+            }
+        }
+        set.clear()
+        events.filter { it.value.second.isNotEmpty() }.forEach {
+            if (!set.add(it.value.first)) {
+                error = "${it.value.first} Event is available more than once"
+                return false
+            }
+        }
+
+        error = ""
+        return true
+    }
+
     fun onEvent(event: DeviceContactCreateUpdateScreenEvent) {
         when(event) {
             is DeviceContactCreateUpdateScreenEvent.OnEmailChange -> {
@@ -130,30 +157,37 @@ class DeviceContactCreateUpdateScreenViewModel(
             }
 
             is DeviceContactCreateUpdateScreenEvent.OnCreate -> {
-                viewModelScope.launch {
-                    val request = DeviceContactRequest(
-                        firstName = firstName,
-                        lastName = lastName,
-                        phone = phones.filter { it.value.second.isNotEmpty() }.map { it.value },
-                        email = emails.filter { it.value.second.isNotEmpty() }.map { it.value },
-                        event = events.filter { it.value.second.isNotEmpty() }.map { it.value }
-                    )
-                    contactsRepository.saveDeviceContact(request)
-                    event.onSaved()
+                if (validate()) {
+                    viewModelScope.launch {
+                        val request = DeviceContactRequest(
+                            firstName = firstName,
+                            lastName = lastName,
+                            phone = phones.filter { it.value.second.isNotEmpty() }.map { it.value },
+                            email = emails.filter { it.value.second.isNotEmpty() }.map { it.value },
+                            event = events.filter { it.value.second.isNotEmpty() }.map { it.value }
+                        )
+                        contactsRepository.saveDeviceContact(request)
+                        event.onSaved()
+                    }
                 }
             }
 
             is DeviceContactCreateUpdateScreenEvent.OnUpdate -> {
-                viewModelScope.launch {
-                    val request = DeviceContactRequest(
-                        firstName = firstName,
-                        lastName = lastName,
-                        phone = phones.filter { it.value.second.isNotBlank() }.map { it.value },
-                        email = emails.filter { it.value.second.isNotBlank() }.map { it.value },
-                        event = events.filter { it.value.second.isNotBlank() }.map { it.value }
-                    )
-                    contactsRepository.saveDeviceContact(contactId = _contactId, request = request)
-                    event.onSaved()
+                if (validate()) {
+                    viewModelScope.launch {
+                        val request = DeviceContactRequest(
+                            firstName = firstName,
+                            lastName = lastName,
+                            phone = phones.filter { it.value.second.isNotBlank() }.map { it.value },
+                            email = emails.filter { it.value.second.isNotBlank() }.map { it.value },
+                            event = events.filter { it.value.second.isNotBlank() }.map { it.value }
+                        )
+                        contactsRepository.saveDeviceContact(
+                            contactId = _contactId,
+                            request = request
+                        )
+                        event.onSaved()
+                    }
                 }
             }
 
