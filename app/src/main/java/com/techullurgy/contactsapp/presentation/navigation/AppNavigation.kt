@@ -269,7 +269,10 @@ private fun AnimatedContentScope.InitialScreen(navController: NavHostController)
         else -> {
             TwoPaneScreen(
                 onRandomContactClick = onRandomContactClick,
-                onDeviceContactClick = onDeviceContactClick
+                onDeviceContactClick = onDeviceContactClick,
+                onAddDeviceClick = onAddDeviceContactClick,
+                onAddRandomClick = onAddRandomContactClick,
+                onGlobalSearchClick = onGlobalSearchClick
             )
         }
     }
