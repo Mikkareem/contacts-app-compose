@@ -32,8 +32,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.techullurgy.contactsapp.presentation.components.ContactTextField
+import com.techullurgy.contactsapp.presentation.components.EmailContactTextField
+import com.techullurgy.contactsapp.presentation.components.NameContactTextField
+import com.techullurgy.contactsapp.presentation.components.PhoneContactTextField
 import com.techullurgy.contactsapp.presentation.components.TypeSelector
+import com.techullurgy.contactsapp.presentation.components.UrlContactTextField
 import com.techullurgy.contactsapp.presentation.viewmodels.RandomContactCreateUpdateScreenEvent
 import com.techullurgy.contactsapp.presentation.viewmodels.RandomContactCreateUpdateScreenViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -129,7 +132,7 @@ private fun RandomContactCreateUpdateScreen(
             ) {
                 item {
                     Text(text = "First Name")
-                    ContactTextField(
+                    NameContactTextField(
                         value = firstName,
                         onValueChange = {
                             onEvent(
@@ -142,7 +145,7 @@ private fun RandomContactCreateUpdateScreen(
 
                 item {
                     Text(text = "Last Name")
-                    ContactTextField(
+                    NameContactTextField(
                         value = lastName,
                         onValueChange = {
                             onEvent(
@@ -168,7 +171,7 @@ private fun RandomContactCreateUpdateScreen(
 
                 item {
                     Text(text = "Phone")
-                    ContactTextField(
+                    PhoneContactTextField(
                         value = phone,
                         onValueChange = {
                             onEvent(
@@ -181,7 +184,7 @@ private fun RandomContactCreateUpdateScreen(
 
                 item {
                     Text(text = "Cell")
-                    ContactTextField(
+                    PhoneContactTextField(
                         value = cell,
                         onValueChange = {
                             onEvent(
@@ -194,7 +197,7 @@ private fun RandomContactCreateUpdateScreen(
 
                 item {
                     Text(text = "Email")
-                    ContactTextField(
+                    EmailContactTextField(
                         value = email,
                         onValueChange = {
                             onEvent(
@@ -207,7 +210,7 @@ private fun RandomContactCreateUpdateScreen(
 
                 item {
                     Text(text = "Profile Url")
-                    ContactTextField(
+                    UrlContactTextField(
                         value = profileUrl,
                         onValueChange = {
                             onEvent(
