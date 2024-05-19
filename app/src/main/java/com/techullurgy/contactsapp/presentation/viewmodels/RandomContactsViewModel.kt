@@ -21,6 +21,11 @@ class RandomContactsViewModel(
     val state: StateFlow<RandomContactsListScreenState> get() = _state.asStateFlow()
 
     init {
+        _state.update {
+            it.copy(
+                pageLoading = true
+            )
+        }
         viewModelScope.launch {
             contactsRepository.getRandomContacts().collectLatest { contacts ->
                 if(contacts.isEmpty()) {
@@ -28,8 +33,9 @@ class RandomContactsViewModel(
                 } else {
                     _state.update {
                         it.copy(
+                            pageLoading = false,
                             contacts = contacts.map { ct -> ct.toRandomContact() },
-                            error = ""
+                            pageError = ""
                         )
                     }
                 }
@@ -43,14 +49,16 @@ class RandomContactsViewModel(
                 is ServiceResult.Success -> {
                     _state.update {
                         it.copy(
-                            error = ""
+                            pageLoading = false,
+                            pageError = ""
                         )
                     }
                 }
                 is ServiceResult.Failure -> {
                     _state.update {
                         it.copy(
-                            error = result.error
+                            pageLoading = false,
+                            pageError = result.error
                         )
                     }
                 }
@@ -59,6 +67,32 @@ class RandomContactsViewModel(
     }
 
     fun onLoadMore() {
+        _state.update {
+            it.copy(
+                loadMoreLoading = true
+            )
+        }
+        viewModelScope.launch {
+            val nextPage = contactsRepository.getLastAvailablePage() + 1
+            when (val result = contactsRepository.getPaginatedRandomContacts(nextPage)) {
+                is ServiceResult.Success -> {
+                    _state.update {
+                        it.copy(
+                            error = "",
+                            loadMoreLoading = false
+                        )
+                    }
+                }
 
+                is ServiceResult.Failure -> {
+                    _state.update {
+                        it.copy(
+                            error = result.error,
+                            loadMoreLoading = false
+                        )
+                    }
+                }
+            }
+        }
     }
 }

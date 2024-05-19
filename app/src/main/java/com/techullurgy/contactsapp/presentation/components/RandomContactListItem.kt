@@ -52,7 +52,7 @@ fun RandomContactListItem(
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = contact.displayName, fontSize = 24.sp)
+            Text(text = contact.displayName, fontSize = 16.sp)
         }
     }
 }
