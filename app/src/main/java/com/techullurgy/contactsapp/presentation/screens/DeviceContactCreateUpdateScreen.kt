@@ -42,6 +42,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.techullurgy.contactsapp.domain.model.EmailType
+import com.techullurgy.contactsapp.domain.model.EventType
+import com.techullurgy.contactsapp.domain.model.PhoneType
 import com.techullurgy.contactsapp.presentation.components.DateContactTextField
 import com.techullurgy.contactsapp.presentation.components.EmailContactTextField
 import com.techullurgy.contactsapp.presentation.components.NameContactTextField
@@ -390,7 +393,7 @@ fun PhoneField(
             Spacer(modifier = Modifier.height(16.dp))
             TypeSelector(
                 label = "Phone Type",
-                types = listOf("Home", "Work", "Mobile"),
+                types = PhoneType.entries.map { it.value },
                 selectedType = type,
                 onSelectionChange = onTypeChange
             )
@@ -432,7 +435,7 @@ private fun EmailField(
             Spacer(modifier = Modifier.height(16.dp))
             TypeSelector(
                 label = "Email Type",
-                types = listOf("Home", "Work", "Mobile"),
+                types = EmailType.entries.map { it.value },
                 selectedType = type,
                 onSelectionChange = onTypeChange
             )
@@ -474,7 +477,7 @@ private fun EventField(
             Spacer(modifier = Modifier.height(16.dp))
             TypeSelector(
                 label = "Event Type",
-                types = listOf("Birthday", "Anniversary"),
+                types = EventType.entries.map { it.value },
                 selectedType = type,
                 onSelectionChange = onTypeChange
             )

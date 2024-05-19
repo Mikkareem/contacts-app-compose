@@ -11,8 +11,11 @@ import com.techullurgy.contactsapp.data.utils.ServiceResult
 import com.techullurgy.contactsapp.domain.ContactsRepository
 import com.techullurgy.contactsapp.domain.model.DeviceContactRequest
 import com.techullurgy.contactsapp.domain.model.EmailInformation
+import com.techullurgy.contactsapp.domain.model.EmailType
 import com.techullurgy.contactsapp.domain.model.EventInformation
+import com.techullurgy.contactsapp.domain.model.EventType
 import com.techullurgy.contactsapp.domain.model.PhoneInformation
+import com.techullurgy.contactsapp.domain.model.PhoneType
 import kotlinx.coroutines.launch
 
 class DeviceContactCreateUpdateScreenViewModel(
@@ -21,9 +24,9 @@ class DeviceContactCreateUpdateScreenViewModel(
 
     var firstName by mutableStateOf("")
     var lastName by mutableStateOf("")
-    var phones = mutableStateListOf(mutableStateOf("Home" to ""))
-    var emails = mutableStateListOf(mutableStateOf("Home" to ""))
-    var events = mutableStateListOf(mutableStateOf("Birthday" to ""))
+    var phones = mutableStateListOf(mutableStateOf(PhoneType.HOME.value to ""))
+    var emails = mutableStateListOf(mutableStateOf(EmailType.HOME.value to ""))
+    var events = mutableStateListOf(mutableStateOf(EventType.BIRTHDAY.value to ""))
     var error by mutableStateOf("")
 
     private var _contactId = ""
@@ -42,41 +45,41 @@ class DeviceContactCreateUpdateScreenViewModel(
                     events = result.data.events.map { info ->
                         when (info) {
                             is EventInformation.AnniversaryEvent -> {
-                                mutableStateOf("Anniversary" to info.eventDate)
+                                mutableStateOf(EventType.ANNIVERSARY.value to info.eventDate)
                             }
 
                             is EventInformation.BirthdayEvent -> {
-                                mutableStateOf("Birthday" to info.eventDate)
+                                mutableStateOf(EventType.BIRTHDAY.value to info.eventDate)
                             }
                         }
                     }.toMutableStateList()
                     phones = result.data.phones.map { info ->
                         when (info) {
                             is PhoneInformation.HomePhone -> {
-                                mutableStateOf("Home" to info.phoneNo)
+                                mutableStateOf(PhoneType.HOME.value to info.phoneNo)
                             }
 
                             is PhoneInformation.MobilePhone -> {
-                                mutableStateOf("Mobile" to info.phoneNo)
+                                mutableStateOf(PhoneType.MOBILE.value to info.phoneNo)
                             }
 
                             is PhoneInformation.WorkPhone -> {
-                                mutableStateOf("Work" to info.phoneNo)
+                                mutableStateOf(PhoneType.WORK.value to info.phoneNo)
                             }
                         }
                     }.toMutableStateList()
                     emails = result.data.emails.map { info ->
                         when (info) {
                             is EmailInformation.HomeEmail -> {
-                                mutableStateOf("Home" to info.email)
+                                mutableStateOf(EmailType.HOME.value to info.email)
                             }
 
                             is EmailInformation.MobileEmail -> {
-                                mutableStateOf("Mobile" to info.email)
+                                mutableStateOf(EmailType.MOBILE.value to info.email)
                             }
 
                             is EmailInformation.WorkEmail -> {
-                                mutableStateOf("Work" to info.email)
+                                mutableStateOf(EmailType.WORK.value to info.email)
                             }
                         }
                     }.toMutableStateList()
@@ -135,15 +138,15 @@ class DeviceContactCreateUpdateScreenViewModel(
             }
 
             DeviceContactCreateUpdateScreenEvent.OnAddEmail -> {
-                emails.add(mutableStateOf("Home" to ""))
+                emails.add(mutableStateOf(EmailType.HOME.value to ""))
             }
 
             DeviceContactCreateUpdateScreenEvent.OnAddEvent -> {
-                events.add(mutableStateOf("Birthday" to ""))
+                events.add(mutableStateOf(EventType.BIRTHDAY.value to ""))
             }
 
             DeviceContactCreateUpdateScreenEvent.OnAddPhone -> {
-                phones.add(mutableStateOf("Home" to ""))
+                phones.add(mutableStateOf(PhoneType.HOME.value to ""))
             }
 
             is DeviceContactCreateUpdateScreenEvent.OnCloseEmail -> {

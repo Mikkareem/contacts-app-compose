@@ -44,8 +44,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techullurgy.contactsapp.domain.model.DeviceContactDetail
 import com.techullurgy.contactsapp.domain.model.EmailInformation
+import com.techullurgy.contactsapp.domain.model.EmailType
 import com.techullurgy.contactsapp.domain.model.EventInformation
+import com.techullurgy.contactsapp.domain.model.EventType
 import com.techullurgy.contactsapp.domain.model.PhoneInformation
+import com.techullurgy.contactsapp.domain.model.PhoneType
 import com.techullurgy.contactsapp.presentation.viewmodels.DeviceContactDetailViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -168,7 +171,7 @@ private fun TwoPaneDeviceContactDetailScreen(
                                                     is PhoneInformation.HomePhone -> {
                                                         Text(text = item.phoneNo, fontSize = 24.sp)
                                                         Text(
-                                                            text = "Home",
+                                                            text = PhoneType.HOME.value,
                                                             color = LocalContentColor.current.copy(
                                                                 alpha = 0.6f
                                                             )
@@ -178,7 +181,7 @@ private fun TwoPaneDeviceContactDetailScreen(
                                                     is PhoneInformation.MobilePhone -> {
                                                         Text(text = item.phoneNo, fontSize = 24.sp)
                                                         Text(
-                                                            text = "Mobile",
+                                                            text = PhoneType.MOBILE.value,
                                                             color = LocalContentColor.current.copy(
                                                                 alpha = 0.6f
                                                             )
@@ -188,7 +191,7 @@ private fun TwoPaneDeviceContactDetailScreen(
                                                     is PhoneInformation.WorkPhone -> {
                                                         Text(text = item.phoneNo, fontSize = 24.sp)
                                                         Text(
-                                                            text = "Work",
+                                                            text = PhoneType.WORK.value,
                                                             color = LocalContentColor.current.copy(
                                                                 alpha = 0.6f
                                                             )
@@ -227,7 +230,7 @@ private fun TwoPaneDeviceContactDetailScreen(
                                                     is EmailInformation.HomeEmail -> {
                                                         Text(text = item.email, fontSize = 24.sp)
                                                         Text(
-                                                            text = "Home",
+                                                            text = EmailType.HOME.value,
                                                             color = LocalContentColor.current.copy(
                                                                 alpha = 0.6f
                                                             )
@@ -237,7 +240,7 @@ private fun TwoPaneDeviceContactDetailScreen(
                                                     is EmailInformation.MobileEmail -> {
                                                         Text(text = item.email, fontSize = 24.sp)
                                                         Text(
-                                                            text = "Mobile",
+                                                            text = EmailType.MOBILE.value,
                                                             color = LocalContentColor.current.copy(
                                                                 alpha = 0.6f
                                                             )
@@ -247,7 +250,7 @@ private fun TwoPaneDeviceContactDetailScreen(
                                                     is EmailInformation.WorkEmail -> {
                                                         Text(text = item.email, fontSize = 24.sp)
                                                         Text(
-                                                            text = "Work",
+                                                            text = EmailType.WORK.value,
                                                             color = LocalContentColor.current.copy(
                                                                 alpha = 0.6f
                                                             )
@@ -289,7 +292,7 @@ private fun TwoPaneDeviceContactDetailScreen(
                                                             fontSize = 24.sp
                                                         )
                                                         Text(
-                                                            text = "Birthday",
+                                                            text = EventType.BIRTHDAY.value,
                                                             color = LocalContentColor.current.copy(
                                                                 alpha = 0.6f
                                                             )
@@ -302,7 +305,7 @@ private fun TwoPaneDeviceContactDetailScreen(
                                                             fontSize = 24.sp
                                                         )
                                                         Text(
-                                                            text = "Anniversary",
+                                                            text = EventType.ANNIVERSARY.value,
                                                             color = LocalContentColor.current.copy(
                                                                 alpha = 0.6f
                                                             )
