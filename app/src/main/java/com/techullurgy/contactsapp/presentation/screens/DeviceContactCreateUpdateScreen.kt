@@ -288,6 +288,9 @@ fun DeviceContactCreateUpdateScreen(
                 }
 
                 item {
+                    if (error.isNotBlank()) {
+                        Text(text = error, color = Color.Red)
+                    }
                     if(isEditRequest) {
                         Button(
                             onClick = {
@@ -314,9 +317,6 @@ fun DeviceContactCreateUpdateScreen(
                         ) {
                             Text(text = "Create")
                         }
-                    }
-                    if (error.isNotBlank()) {
-                        Text(text = error, color = Color.Red)
                     }
                 }
             }
