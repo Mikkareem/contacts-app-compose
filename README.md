@@ -22,7 +22,6 @@ Considerations: (These things, not able to implement within the time constraints
 1) Font changes
 2) stringResource() usage
 3) Except CompactWidth devices, Add Device/Random is not yet implemented in TwoPane screens
-4) Permission Missing cases UI is not implemented
 
 
 Usage:
