@@ -1,19 +1,16 @@
 package com.techullurgy.contactsapp
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.techullurgy.contactsapp.presentation.navigation.AppNavigation
 import com.techullurgy.contactsapp.ui.theme.ContactsAppTheme
@@ -23,28 +20,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
-            var permissionGranted by rememberSaveable {
-                mutableStateOf(false)
-            }
-
-            val launcher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.RequestMultiplePermissions()
-            ) {
-                if (it.all { t -> t.value }) {
-                    permissionGranted = true
-                }
-            }
-
-            LaunchedEffect(key1 = Unit) {
-                launcher.launch(
-                    arrayOf(
-                        Manifest.permission.READ_CONTACTS,
-                        Manifest.permission.WRITE_CONTACTS,
-                    )
-                )
-            }
-
             ContactsAppTheme {
                 AppNavigation()
             }
@@ -64,4 +39,11 @@ fun Context.hasContactWritePermission(): Boolean {
         this,
         Manifest.permission.WRITE_CONTACTS
     ) == PackageManager.PERMISSION_GRANTED
+}
+
+fun Activity.openAppSettings() {
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", packageName, null)
+    ).also(::startActivity)
 }

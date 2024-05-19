@@ -84,8 +84,12 @@ fun TabsScreen(
             }
         },
         onDenied = {
-            // TODO: Improve UI
-            Log.d("_TAG_", "Read Contacts Permission Denied")
+            navController.navigate(Screen.DeviceList.name) {
+                launchSingleTop = true
+                popUpTo(navController.graph.findStartDestination().route!!) {
+                    inclusive = false
+                }
+            }
         }
     )
 
