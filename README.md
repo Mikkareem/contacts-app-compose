@@ -21,8 +21,6 @@ Adaptive UIs:
 Considerations: (These things, not able to implement within the time constraints, But I can explain how to achieve this in our app)
 1) Font changes
 2) stringResource() usage
-3) Except CompactWidth devices, Add Device/Random is not yet implemented in TwoPane screens
-
 
 Usage:
 Device Contact Add/Edit:
