@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -27,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.techullurgy.contactsapp.domain.model.DeviceContact
@@ -89,9 +92,13 @@ private fun GlobalSearchScreen(
                     placeholder = {
                         Text(
                             text = "Search Globally",
-                            color = LocalContentColor.current.copy(alpha = 0.6f)
+                            color = LocalContentColor.current.copy(alpha = 0.6f),
+                            fontWeight = FontWeight.SemiBold
                         )
-                    }
+                    },
+                    textStyle = LocalTextStyle.current.copy(fontWeight = FontWeight.SemiBold),
+                    shape = CircleShape,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
@@ -104,7 +111,12 @@ private fun GlobalSearchScreen(
         ) {
             if(query.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "You can search here both Random and Device Contact")
+                    Text(
+                        text = "You can search here both Random and Device Contacts",
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.fillMaxWidth(.65f)
+                    )
                 }
             } else if(state.randoms.isEmpty() && state.devices.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
