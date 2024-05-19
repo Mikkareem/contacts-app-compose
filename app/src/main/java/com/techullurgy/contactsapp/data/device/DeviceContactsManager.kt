@@ -8,8 +8,11 @@ import com.techullurgy.contactsapp.domain.model.DeviceContact
 import com.techullurgy.contactsapp.domain.model.DeviceContactDetail
 import com.techullurgy.contactsapp.domain.model.DeviceContactRequest
 import com.techullurgy.contactsapp.domain.model.EmailInformation
+import com.techullurgy.contactsapp.domain.model.EmailType
 import com.techullurgy.contactsapp.domain.model.EventInformation
+import com.techullurgy.contactsapp.domain.model.EventType
 import com.techullurgy.contactsapp.domain.model.PhoneInformation
+import com.techullurgy.contactsapp.domain.model.PhoneType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -220,9 +223,9 @@ class DeviceContactsManager(
         if(request.phone.isNotEmpty()) {
             request.phone.map { detail ->
                 val phoneType = when(detail.first) {
-                    "Home" -> ContactsContract.CommonDataKinds.Phone.TYPE_HOME
-                    "Mobile" -> ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE
-                    "Work" -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK
+                    PhoneType.HOME.value -> ContactsContract.CommonDataKinds.Phone.TYPE_HOME
+                    PhoneType.MOBILE.value -> ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE
+                    PhoneType.WORK.value -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK
                     else -> ContactsContract.CommonDataKinds.Phone.TYPE_OTHER
                 }
 
@@ -241,9 +244,9 @@ class DeviceContactsManager(
         if(request.email.isNotEmpty()) {
             request.email.map { detail ->
                 val emailType = when(detail.first) {
-                    "Home" -> ContactsContract.CommonDataKinds.Email.TYPE_HOME
-                    "Mobile" -> ContactsContract.CommonDataKinds.Email.TYPE_MOBILE
-                    "Work" -> ContactsContract.CommonDataKinds.Email.TYPE_WORK
+                    EmailType.HOME.value -> ContactsContract.CommonDataKinds.Email.TYPE_HOME
+                    EmailType.MOBILE.value -> ContactsContract.CommonDataKinds.Email.TYPE_MOBILE
+                    EmailType.WORK.value -> ContactsContract.CommonDataKinds.Email.TYPE_WORK
                     else -> ContactsContract.CommonDataKinds.Email.TYPE_OTHER
                 }
 
@@ -262,8 +265,8 @@ class DeviceContactsManager(
         if(request.event.isNotEmpty()) {
             request.event.map { detail ->
                 val eventType = when(detail.first) {
-                    "Birthday" -> ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
-                    "Anniversary" -> ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY
+                    EventType.BIRTHDAY.value -> ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
+                    EventType.ANNIVERSARY.value -> ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY
                     else -> ContactsContract.CommonDataKinds.Event.TYPE_OTHER
                 }
 
@@ -304,9 +307,9 @@ class DeviceContactsManager(
         if(request.phone.isNotEmpty()) {
             request.phone.map { detail ->
                 val phoneType = when(detail.first) {
-                    "Home" -> ContactsContract.CommonDataKinds.Phone.TYPE_HOME
-                    "Mobile" -> ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE
-                    "Work" -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK
+                    PhoneType.HOME.value -> ContactsContract.CommonDataKinds.Phone.TYPE_HOME
+                    PhoneType.MOBILE.value -> ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE
+                    PhoneType.WORK.value -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK
                     else -> ContactsContract.CommonDataKinds.Phone.TYPE_OTHER
                 }
 
@@ -342,9 +345,9 @@ class DeviceContactsManager(
         if(request.email.isNotEmpty()) {
             request.email.map { detail ->
                 val emailType = when(detail.first) {
-                    "Home" -> ContactsContract.CommonDataKinds.Email.TYPE_HOME
-                    "Mobile" -> ContactsContract.CommonDataKinds.Email.TYPE_MOBILE
-                    "Work" -> ContactsContract.CommonDataKinds.Email.TYPE_WORK
+                    EmailType.HOME.value -> ContactsContract.CommonDataKinds.Email.TYPE_HOME
+                    EmailType.MOBILE.value -> ContactsContract.CommonDataKinds.Email.TYPE_MOBILE
+                    EmailType.WORK.value -> ContactsContract.CommonDataKinds.Email.TYPE_WORK
                     else -> ContactsContract.CommonDataKinds.Email.TYPE_OTHER
                 }
 
@@ -381,8 +384,8 @@ class DeviceContactsManager(
         if(request.event.isNotEmpty()) {
             request.event.map { detail ->
                 val eventType = when(detail.first) {
-                    "Birthday" -> ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
-                    "Anniversary" -> ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY
+                    EventType.BIRTHDAY.value -> ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
+                    EventType.ANNIVERSARY.value -> ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY
                     else -> ContactsContract.CommonDataKinds.Event.TYPE_OTHER
                 }
 
