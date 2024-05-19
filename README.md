@@ -20,10 +20,9 @@ Adaptive UIs:
 
 Considerations: (These things, not able to implement within the time constraints, But I can explain how to achieve this in our app)
 1) Font changes
-2) I/P Keyboard actions like PhoneType, EmailType Keyboard Options
-3) stringResource() usage
-4) Except CompactWidth devices, Add Device/Random is not yet implemented in TwoPane screens
-5) Permission Missing cases UI is not implemented
+2) stringResource() usage
+3) Except CompactWidth devices, Add Device/Random is not yet implemented in TwoPane screens
+4) Permission Missing cases UI is not implemented
 
 
 Usage:
